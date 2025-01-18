@@ -36,113 +36,115 @@
         </div>
     </aside>
     <main>
-        <head>
-            <button>25&deg;C.</button>
-            <button>25&deg;C.</button>
-            <img src="" alt="user-icon">
-        </head>
+        <header>
+            <button class="active">&deg;C</button>
+            <button>&deg;F</button>
+            <svg width="30px" height="30px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"></path> <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"></path> </g></svg>
+        </header>
         <div id="forcast-showcase">
             <div id="range-toggle">
-                <button>Today</button>
+                <button class="active">Today</button>
                 <button>Week</button>
             </div>
             <div id="showcase-container">
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp">25&deg;C.</div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
                 <div class="forcast-card">
-                    <h4 id="forcast-period">Sun</h4>
+                    <h4 class="forcast-period">Sun</h4>
                     <img src="" alt="foecast-icon">
-                    <div id="forcast-temp"></div>
+                    <div class="forcast-temp"></div>
                 </div>
             </div>
         </div>
         <div id="highlights">
-            <div class="highlight-card">
-                <h3 class="highlight-heading">Wind Status</h3>
-                <div class="highlight-info">
-                    <div class="info"></div>
-                    <div id="direction-info">
-                        <svg id="direction" width="64px" height="64px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 5V19M12 5L6 11M12 5L18 11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-    
-                        <span id="direction-value">SW</span>
-                    </div>
-                </div>
-            </div>
-            <div class="highlight-card">
-                <h3 class="highlight-heading">UV Index</h3>
-                <div class="highlight-info"></div>
-            </div>
-            <div class="highlight-card">
-                <h3 class="highlight-heading">Sunrise & Sunset</h3>
-                <div class="highlight-info">
-                    <div id="sunrise-info">
-                        <img src="" alt="sunrise image">
-                        <div class="info">
-                            <h4>time</h4>
-                            <small>-1m 46s</small>
-                        </div>
-                    </div>
-                    <div id="sunset-info">
-                        <img src="" alt="sunset image">
-                        <div class="info">
-                            <h4>time</h4>
-                            <small>-1m 46s</small>
+            <h2>Today's Highlights</h2>
+            <div id="highlight-container">
+                <div id="wind-status" class="highlight-card">
+                    <h3 class="highlight-heading">Wind Status</h3>
+                    <div class="highlight-info">
+                        <div class="info">7.70<span>km/h</span></div>
+                        <div id="direction-info">
+                            <svg id="direction" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(225)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 5V19M12 5L6 11M12 5L18 11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            <span id="direction-value">SW</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="highlight-card">
-                <h3 class="highlight-heading">Humidity</h3>
-                <div class="highlight-info">
-                    <div class="info"></div>
-                    <span class="info-rating">Normal</span>
+                <div id="uv-index" class="highlight-card">
+                    <h3 class="highlight-heading">UV Index</h3>
+                    <div class="highlight-info">5</div>
                 </div>
-            </div>
-            <div class="highlight-card">
-                <h3 class="highlight-heading">Visibility</h3>
-                <div class="highlight-info">
-                    <div class="info"></div>
-                    <span class="info-rating">Normal</span>
+                <div id="sunrise-sunset" class="highlight-card">
+                    <h3 class="highlight-heading">Sunrise & Sunset</h3>
+                    <div class="highlight-info">
+                        <div id="sunrise-info">
+                            <img src="" alt="sunrise image">
+                            <div>
+                                <h4>time</h4>
+                                <small>-1m 46s</small>
+                            </div>
+                        </div>
+                        <div id="sunset-info">
+                            <img src="" alt="sunset image">
+                            <div>
+                                <h4>time</h4>
+                                <small>-1m 46s</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="highlight-card">
-                <h3 class="highlight-heading">Air Quantity</h3>
-                <div class="highlight-info">
-                    <div class="info"></div>
-                    <span class="info-rating">Normal</span>
+                <div id="humidity" class="highlight-card">
+                    <h3 class="highlight-heading">Humidity</h3>
+                    <div class="highlight-info">
+                        <div class="info">12<sup>%</sup></div>
+                        <span class="info-rating">Normal</span>
+                    </div>
+                </div>
+                <div id="visibility" class="highlight-card">
+                    <h3 class="highlight-heading">Visibility</h3>
+                    <div class="highlight-info">
+                        <div class="info">5.2<span>km</span></div>
+                        <span class="info-rating">Normal</span>
+                    </div>
+                </div>
+                <div id="air-quality" class="highlight-card">
+                    <h3 class="highlight-heading">Air Quantity</h3>
+                    <div class="highlight-info">
+                        <div class="info">10</div>
+                        <span class="info-rating">Normal</span>
+                    </div>
                 </div>
             </div>
         </div>
