@@ -1,26 +1,28 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   mode: 'development',
   entry: {
     main: './src/index.js',
   },
-  output: {                               //we use the content hash for keeping track of cache
-    filename: '[name].[contenthash].js', //this name value will be whatever the property name is on line 6
+  output: {
+    //We use the content hash for keeping track of cache
+    filename: '[name].[contenthash].js', //This name value will be whatever the property name is on line 6
     path: path.resolve(__dirname, 'dist'),
-    clean: true, //cleans hash
-    assetModuleFilename: '[name][ext]',//to maintain asset file name
+    clean: true, //Cleans hash
+    assetModuleFilename: '[name][ext]', //To maintain asset file name
   },
 
   devServer: {
     static: {
-      //the folder we are serving
+      //The folder we are serving
       directory: path.join(__dirname, 'dist'),
     },
-    open: true, //opens browser automatically when we run dev
-    hot: true, //for hot reloading 
+    open: true, //Opens browser automatically when we run dev
+    hot: true, //For hot reloading
     compress: true,
     port: 3000,
     historyApiFallback: true,
@@ -28,12 +30,12 @@ module.exports = {
 
   module: {
     rules: [
-      // for loadind images  
+      // For loadind images
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
-      },  
-      // for loading fonts
+      },
+      // For loading fonts
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
@@ -50,10 +52,14 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
-      }
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      {
+        test: /\.svg$/,
+        use: 'svg-inline-loader', // Inline SVG as raw text
+      },
     ],
   },
 
@@ -63,10 +69,10 @@ module.exports = {
       title: 'Webpack App',
       filename: 'index.html',
 
-      //sets an html template that index.html will inherit from
-      template: 'src/template.html'
+      //Sets an html template that index.html will inherit from
+      template: 'src/template.html',
     }),
 
-    // new BundleAnalyzerPlugin(),
-  ]
+    // New BundleAnalyzerPlugin(),
+  ],
 };

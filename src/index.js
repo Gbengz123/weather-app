@@ -1,21 +1,34 @@
 import './style.css';
 import './assets/fonts/OpenSans-Regular.ttf';
+import displayAsideData from './aside';
+//Imports url of all svg files
+// By using svgname.svg we get url to the svg i.e http://localhost:3000/svgname.svg
+const svgFiles = require.context(
+  './assets/WeatherIcons/SVG/1stSet-Color',
+  false,
+  /\.svg$/,
+);
 
 const Forcastdata = getForcastData();
+displayAsideData();
 
-export { Forcastdata }
+export { Forcastdata, loadSVG };
 
 async function getForcastData() {
-  const weekData = await fetch(
-    `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/abuja/next7days?unitGroup=us&key=MLFYNH7CZDJEDYWWDESDBLXVF&contentType=json`,
-  );
-  const weekJSONData = await weekData.json();
+  try {
+    const weekData = await fetch(
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/abuja/next7days?unitGroup=metric&key=MLFYNH7CZDJEDYWWDESDBLXVF&contentType=json`,
+    );
+    const weekJSONData = await weekData.json();
 
-  const currentDayData = processcurrentDayData(weekJSONData);
-  const currentweekData = processWeekData(weekJSONData);
-  const hourlyData = processHourlyData(weekJSONData);
+    const currentDayData = processcurrentDayData(weekJSONData);
+    const currentweekData = processWeekData(weekJSONData);
+    const hourlyData = processHourlyData(weekJSONData);
 
-  return { currentDayData, currentweekData, hourlyData };
+    return { currentDayData, currentweekData, hourlyData };
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
 }
 
 function processcurrentDayData(weekData) {
@@ -111,4 +124,32 @@ function filterObject(...porpkeys) {
     }, {});
 
   return filteredObject;
+}
+
+function loadSVG(url, containerId) {
+  fetch(url)
+    .then((res) => res.text())
+    .then((svgText) => {
+      // Clean up the SVG by removing escape characters
+      let cleanedSvgText = svgText.replace(/\\\"/g, '"'); // Replace \\\" with "
+      cleanedSvgText = cleanedSvgText.replace(/\\'/g, "'"); // Replace \\' with '
+
+      // Remove any extra unwanted characters like 'module.exports ='
+      cleanedSvgText = cleanedSvgText.replace(/^module\.exports = /, '').trim();
+
+      // You can also further clean if necessary (e.g., replacing extra spaces, newlines, etc.)
+      // For example, fixing the 'viewBox' if needed:
+      cleanedSvgText = cleanedSvgText.replace(/viewBox="\\\"0/g, 'viewBox="0'); // Fix malformed viewBox\\
+
+      cleanedSvgText = cleanedSvgText.slice(1, -1);
+
+      // Insert the cleaned SVG into your container
+      const container = document.getElementById(containerId);
+      container.innerHTML = cleanedSvgText;
+
+      console.log(cleanedSvgText);
+    })
+    .catch((error) => {
+      console.error('Error loading SVG:', error);
+    });
 }
