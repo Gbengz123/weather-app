@@ -277,7 +277,7 @@ main #forcast-showcase{
   font-weight: bold;
 }
 
-.forcast-card img{
+.forcast-card .forcast-icon{
   width: 45px;
   height: 45px;
 }

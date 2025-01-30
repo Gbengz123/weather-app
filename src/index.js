@@ -1,6 +1,7 @@
 import './style.css';
 import './assets/fonts/OpenSans-Regular.ttf';
 import displayAsideData from './aside';
+import dispalyMain from './main';
 //Imports url of all svg files
 // By using svgname.svg we get url to the svg i.e http://localhost:3000/svgname.svg
 const svgFiles = require.context(
@@ -11,6 +12,7 @@ const svgFiles = require.context(
 
 const Forcastdata = getForcastData();
 displayAsideData();
+dispalyMain();
 
 export { Forcastdata, loadSVG };
 
@@ -147,7 +149,6 @@ function loadSVG(url, containerId) {
       const container = document.getElementById(containerId);
       container.innerHTML = cleanedSvgText;
 
-      console.log(cleanedSvgText);
     })
     .catch((error) => {
       console.error('Error loading SVG:', error);

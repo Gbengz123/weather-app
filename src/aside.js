@@ -19,8 +19,6 @@ async function displayAsideData() {
   const currentdayData = (await Forcastdata).currentDayData;
   const weekData = (await Forcastdata).currentweekData;
 
-  console.log(currentdayData);
-
   displayAsideShowcase(currentdayData);
   displayAsidebBottom(weekData);
 }
@@ -45,7 +43,6 @@ function displayAsideShowcase(dayData) {
 
 //Display aside bottom data
 function displayAsidebBottom(weekData) {
-  console.log(weekData);
   const tommorow = weekData[1];
 
   const date = new Date(tommorow.datetime);
