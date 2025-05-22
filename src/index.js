@@ -10,17 +10,70 @@ const svgFiles = require.context(
   /\.svg$/,
 );
 
-const Forcastdata = getForcastData();
+const searchBar = document.getElementById('search-bar');
+const searchBarInput = document.querySelector('input');
+const searchErrMsg = document.getElementById('search-err');
+
+searchBar.addEventListener('submit', searchForcast);
+
+let Forcastdata = getForcastData('minna');
 displayAsideData();
 dispalyMain();
 
-export { Forcastdata, loadSVG };
+export { Forcastdata, loadSVG, toggleButtton };
 
-async function getForcastData() {
+function searchForcast(event) {
+  event.preventDefault();
+
+  const toggleButttons = document.querySelectorAll('.toggle-btn');
+
+  if (searchBarInput.value === '' || searchBarInput.value === null) {
+    searchErrMsg.textContent = 'Please enter a location';
+  } else {
+    searchErrMsg.textContent = '';
+
+    Forcastdata = getForcastData(`${searchBarInput.value}`);
+
+    Forcastdata.then((data) => {
+      if (data === undefined) {
+        searchErrMsg.textContent = 'location can not be found';
+
+        toggleButttons.forEach((button) => {
+          button.disabled = true;
+        });
+      } else {
+        searchBarInput.value = '';
+
+        toggleButttons.forEach((button) => {
+          button.disabled = false;
+        });
+
+        displayAsideData();
+        dispalyMain();
+      }
+    });
+  }
+}
+
+//Used to fetch forecast data from the API
+async function getForcastData(location) {
   try {
+    //This will return a response object uncomment the console.log to see
     const weekData = await fetch(
-      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/abuja/next7days?unitGroup=metric&key=MLFYNH7CZDJEDYWWDESDBLXVF&contentType=json`,
+      `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}/next7days?unitGroup=metric&key=MLFYNH7CZDJEDYWWDESDBLXVF&contentType=json`,
     );
+
+    //Console.log(weekData)
+
+    //Check if the weekData response is OK (i.e we got an ok response)
+    if (!weekData.ok) {
+      if (weekData.status === 400) {
+        console.error('user inputed bad reqeust');
+      }
+      throw new Error(`Request failed with status ${weekData.status}`);
+    }
+
+    // This parses the response body as JSON and returns a promise Object with our data as the result
     const weekJSONData = await weekData.json();
 
     const currentDayData = processcurrentDayData(weekJSONData);
@@ -29,10 +82,11 @@ async function getForcastData() {
 
     return { currentDayData, currentweekData, hourlyData };
   } catch (error) {
-    console.error(`Error: ${error}`);
+    console.error(`${error}`);
   }
 }
 
+// Used to get current day data needed
 function processcurrentDayData(weekData) {
   const currentDayData = filterObject(
     'temp',
@@ -46,12 +100,14 @@ function processcurrentDayData(weekData) {
     'visibility',
     'conditions',
     'cloudcover',
+    'solarradiation',
     weekData.currentConditions,
   );
 
   return currentDayData;
 }
 
+// Used to get current week data needed
 function processWeekData(weekData) {
   let weekdaysData = [];
 
@@ -72,6 +128,7 @@ function processWeekData(weekData) {
   return weekdaysData;
 }
 
+//Used to get hourly data needed
 function processHourlyData(weekData) {
   let hourlyData = [];
 
@@ -148,9 +205,20 @@ function loadSVG(url, containerId) {
       // Insert the cleaned SVG into your container
       const container = document.getElementById(containerId);
       container.innerHTML = cleanedSvgText;
-
     })
     .catch((error) => {
       console.error('Error loading SVG:', error);
     });
+}
+
+function toggleButtton(button, allbuttons) {
+  button.addEventListener('click', () => {
+    // Remove active state of all buttons
+    allbuttons.forEach((button) => {
+      button.classList.remove('active');
+    });
+
+    // Add active state to clicked button
+    button.classList.add('active');
+  });
 }
