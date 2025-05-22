@@ -75,6 +75,11 @@ aside #aside-top{
   gap: 10px;
 }
 
+#search-container{
+  display: flex;
+  flex-direction: column;
+}
+
 #aside-top #search-bar{
   display: flex;
   border-radius: 15px;
@@ -84,6 +89,11 @@ aside #aside-top{
 
 #search-bar >*{
   border: none;
+}
+
+#search-err{
+  font-size: 0.8em;
+  color: red;
 }
 
 #search-bar input{
@@ -345,11 +355,20 @@ main #forcast-showcase{
   align-items: center;
 }
 
+.highlight-card#uv-index{
+  gap: 10px;
+}
+
 .highlight-card#uv-index .highlight-info{
-  margin-top: 20px;
   font-size: 2.3em;
   text-align: center;
 } 
+
+.highlight-card#uv-index img{
+  align-self: center;
+  width: 80px;
+  height: 60px;
+}
 
 .highlight-card#sunrise-sunset .highlight-info{
   display: flex;
@@ -357,7 +376,6 @@ main #forcast-showcase{
 }
 
 .highlight-card#sunrise-sunset img{
-  border: 1px solid black;
   width: 50px;
   height: 43px;
 }
