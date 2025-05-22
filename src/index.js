@@ -13,10 +13,13 @@ const svgFiles = require.context(
 const searchBar = document.getElementById('search-bar');
 const searchBarInput = document.querySelector('input');
 const searchErrMsg = document.getElementById('search-err');
+const loadContainers = document.querySelectorAll('.load-container');
+const errorMessage = document.getElementById('error-msg');
 
 searchBar.addEventListener('submit', searchForcast);
 
 let Forcastdata = getForcastData('minna');
+console.log(Forcastdata);
 displayAsideData();
 dispalyMain();
 
@@ -36,8 +39,6 @@ function searchForcast(event) {
 
     Forcastdata.then((data) => {
       if (data === undefined) {
-        searchErrMsg.textContent = 'location can not be found';
-
         toggleButttons.forEach((button) => {
           button.disabled = true;
         });
@@ -70,8 +71,15 @@ async function getForcastData(location) {
       if (weekData.status === 400) {
         console.error('user inputed bad reqeust');
       }
+      searchErrMsg.textContent = 'location can not be found';
       throw new Error(`Request failed with status ${weekData.status}`);
     }
+
+    loadContainers.forEach((container) => {
+      container.classList.remove('loading');
+    });
+
+    errorMessage.style.display = 'none';
 
     // This parses the response body as JSON and returns a promise Object with our data as the result
     const weekJSONData = await weekData.json();
@@ -79,10 +87,19 @@ async function getForcastData(location) {
     const currentDayData = processcurrentDayData(weekJSONData);
     const currentweekData = processWeekData(weekJSONData);
     const hourlyData = processHourlyData(weekJSONData);
+    const address = processcurrentAddress(weekJSONData);
 
-    return { currentDayData, currentweekData, hourlyData };
+    console.log(address);
+
+    return { currentDayData, currentweekData, hourlyData, address };
   } catch (error) {
-    console.error(`${error}`);
+    //Catch for when we have a network error
+    if (error instanceof TypeError) {
+      console.error('Likely network error or CORS issue:', error.message);
+      errorMessage.style.display = 'flex';
+    } else {
+      console.error('Unexpected error:', error.message);
+    }
   }
 }
 
@@ -149,6 +166,17 @@ function processHourlyData(weekData) {
   });
 
   return hourlyData;
+}
+
+function processcurrentAddress(weekData) {
+  const addressObject = filterObject(
+    'resolvedAddress',
+    'address',
+    'timezone',
+    weekData,
+  );
+
+  return addressObject;
 }
 
 // Gets specific day fom date yyyy-mm-dd

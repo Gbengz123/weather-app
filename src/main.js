@@ -93,6 +93,7 @@ function createShowcaseCard() {
   // Create the main forecast card container
   const forecastCard = document.createElement('div');
   forecastCard.classList.add('forcast-card');
+  forecastCard.classList.add('load-container');
 
   // Create the forecast period h4 element
   const forecastPeriod = document.createElement('h4');
@@ -116,34 +117,249 @@ function createShowcaseCard() {
 }
 
 function loadTodaysHighlights(dayData) {
-  console.log(dayData);
-  const windStatus = document.getElementById('wind-status');
-  const windStatusInfo = windStatus.querySelector('.info');
-  const uvIndex = document.getElementById('uv-index');
-  const uvIndexInfo = uvIndex.querySelector('.highlight-info');
-  const uvIndexIcon = uvIndex.querySelector('img');
-  const sunriseSunset = document.getElementById('sunrise-sunset');
-  const sunriseSunsetIcons = sunriseSunset.querySelectorAll('img');
-  const sunrisesunsetTime = sunriseSunset.querySelectorAll('h4');
-  const humidity = document.getElementById('humidity');
-  const humidityInfo = humidity.querySelector('.info');
-  const visibility = document.getElementById('visibility');
-  const visibilityInfo = visibility.querySelector('.info');
-  const solarRadiation = document.getElementById('solar-radiation');
-  const solarRadiationInfo = solarRadiation.querySelector('.info');
+  createWindstatusElements();
+  createUvIndexElements();
+  createsunriseSunsetElements();
+  createHumidityElements();
+  createVisibilityElements();
+  createSolarRadiationSection(
+    `${dayData.solarradiation}<span>W/m2</span>`,
+    'Normal',
+  );
 
-  console.log(sunriseSunsetIcons);
+  function createWindstatusElements() {
+    const windStatus = document.getElementById('wind-status');
+    windStatus.innerHTML = '';
 
-  windStatusInfo.innerHTML = `${dayData.windspeed}<span>km/h</span>`;
-  uvIndexInfo.textContent = dayData.uvindex;
-  uvIndexIcon.src = uvIcon;
-  sunriseSunsetIcons[0].src = sunriseIcon;
-  sunriseSunsetIcons[1].src = sunsetIcon;
-  sunrisesunsetTime[0].textContent = dayData.sunrise;
-  sunrisesunsetTime[1].textContent = dayData.sunset;
-  humidityInfo.innerHTML = `${dayData.humidity}<sup>%</sup>`;
-  visibilityInfo.textContent = dayData.visibility;
-  solarRadiationInfo.innerHTML = `${dayData.solarradiation}<span>W/m2</span>`;
+    const heading = document.createElement('h3');
+    heading.className = 'highlight-heading';
+    heading.textContent = 'Wind Status';
+
+    // Create the container for wind info
+    const highlightInfo = document.createElement('div');
+    highlightInfo.className = 'highlight-info';
+
+    // Create the speed info
+    const speedInfo = document.createElement('div');
+    speedInfo.className = 'info';
+    speedInfo.innerHTML = `${dayData.windspeed}<span>km/h</span>`;
+
+    // Create the direction-info container
+    const directionInfo = document.createElement('div');
+    directionInfo.id = 'direction-info';
+
+    // Create the SVG element (as a string, then inserted as HTML)
+    const svgHTML = `
+    <svg id="direction" width="30px" height="30px" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg" transform="rotate(225)">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <path d="M12 5V19M12 5L6 11M12 5L18 11" stroke="#000000" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round"></path>
+      </g>
+    </svg>
+    `;
+
+    // Insert SVG into direction-info
+    directionInfo.innerHTML = svgHTML;
+
+    // Create the direction label
+    const directionValue = document.createElement('span');
+    directionValue.id = 'direction-value';
+    directionValue.textContent = 'SW';
+
+    // Append direction label to direction-info
+    directionInfo.appendChild(directionValue);
+
+    // Assemble everything
+    highlightInfo.appendChild(speedInfo);
+    highlightInfo.appendChild(directionInfo);
+
+    // Finally, append everything to the document
+    windStatus.appendChild(heading);
+    windStatus.appendChild(highlightInfo);
+  }
+
+  function createUvIndexElements() {
+    const uvIndex = document.getElementById('uv-index');
+    uvIndex.innerHTML = '';
+
+    // Create heading
+    const uvHeading = document.createElement('h3');
+    uvHeading.className = 'highlight-heading';
+    uvHeading.textContent = 'UV Index';
+
+    // Create image
+    const uvImage = document.createElement('img');
+    uvImage.src = uvIcon;
+    uvImage.alt = 'uv-icon';
+
+    // Create the info container
+    const uvInfo = document.createElement('div');
+    uvInfo.className = 'highlight-info';
+    uvInfo.textContent = dayData.uvindex;
+
+    uvIndex.appendChild(uvHeading);
+    uvIndex.appendChild(uvImage);
+    uvIndex.appendChild(uvInfo);
+  }
+
+  function createsunriseSunsetElements() {
+    const sunriseSunset = document.getElementById('sunrise-sunset');
+    sunriseSunset.innerHTML = '';
+
+    // Create the heading
+    const heading = document.createElement('h3');
+    heading.className = 'highlight-heading';
+    heading.textContent = 'Sunrise & Sunset';
+
+    // Create highlight-info container
+    const highlightInfo = document.createElement('div');
+    highlightInfo.className = 'highlight-info';
+
+    // Helper function to create sunrise/sunset block
+    function createSunInfo(id, imgSrc, time, duration) {
+      const container = document.createElement('div');
+      container.id = id;
+
+      const img = document.createElement('img');
+      img.src = imgSrc; // Set the src dynamically as needed
+      img.alt = 'sunrise-img';
+
+      const timeContainer = document.createElement('div');
+
+      const h4 = document.createElement('h4');
+      h4.textContent = time;
+
+      const small = document.createElement('small');
+      small.textContent = duration;
+
+      timeContainer.appendChild(h4);
+      timeContainer.appendChild(small);
+
+      container.appendChild(img);
+      container.appendChild(timeContainer);
+
+      return container;
+    }
+
+    // Create sunrise and sunset blocks
+    const sunriseBlock = createSunInfo(
+      'sunrise-info',
+      sunriseIcon,
+      dayData.sunrise,
+      '-1m 46s',
+    );
+    const sunsetBlock = createSunInfo(
+      'sunset-info',
+      sunsetIcon,
+      dayData.sunset,
+      '-1m 46s',
+    );
+
+    // Append blocks to highlight-info
+    highlightInfo.appendChild(sunriseBlock);
+    highlightInfo.appendChild(sunsetBlock);
+
+    // Append everything to the document body (or a container)
+    sunriseSunset.appendChild(heading);
+    sunriseSunset.appendChild(highlightInfo);
+  }
+
+  function createHumidityElements() {
+    const humidity = document.getElementById('humidity');
+    humidity.innerHTML = '';
+
+    // Create heading
+    const humidityHeading = document.createElement('h3');
+    humidityHeading.className = 'highlight-heading';
+    humidityHeading.textContent = 'Humidity';
+
+    // Create highlight-info container
+    const highlightInfo = document.createElement('div');
+    highlightInfo.className = 'highlight-info';
+
+    // Create humidity info value
+    const humidityInfo = document.createElement('div');
+    humidityInfo.className = 'info';
+    humidityInfo.innerHTML = `${dayData.humidity}<sup>%</sup>`; // Example value — update dynamically
+
+    // Create humidity rating
+    const humidityRating = document.createElement('span');
+    humidityRating.className = 'info-rating';
+    humidityRating.textContent = 'Normal'; // Example label — update as needed
+
+    // Append info and rating to container
+    highlightInfo.appendChild(humidityInfo);
+    highlightInfo.appendChild(humidityRating);
+
+    // Append heading and container to the document
+    humidity.appendChild(humidityHeading);
+    humidity.appendChild(highlightInfo);
+  }
+
+  function createVisibilityElements() {
+    const visibilityContainer = document.getElementById('visibility');
+    visibilityContainer.innerHTML = '';
+
+    // Create heading
+    const visibilityHeading = document.createElement('h3');
+    visibilityHeading.className = 'highlight-heading';
+    visibilityHeading.textContent = 'Visibility';
+
+    // Create container for visibility info
+    const visibilityInfoContainer = document.createElement('div');
+    visibilityInfoContainer.className = 'highlight-info';
+
+    // Create visibility value element
+    const visibilityInfo = document.createElement('div');
+    visibilityInfo.className = 'info';
+    visibilityInfo.textContent = dayData.visibility; // Example value – replace as needed
+
+    // Create visibility rating element
+    const visibilityRating = document.createElement('span');
+    visibilityRating.className = 'info-rating';
+    visibilityRating.textContent = 'Normal'; // Can be "Good", "Poor", etc., based on conditions
+
+    // Assemble the elements
+    visibilityInfoContainer.appendChild(visibilityInfo);
+    visibilityInfoContainer.appendChild(visibilityRating);
+
+    // Append to document (or a specific container)
+    visibilityContainer.appendChild(visibilityHeading);
+    visibilityContainer.appendChild(visibilityInfoContainer);
+  }
+
+  function createSolarRadiationSection(value, rating) {
+    const solarRadiation = document.getElementById('solar-radiation');
+    solarRadiation.innerHTML = '';
+
+    const heading = document.createElement('h3');
+    heading.className = 'highlight-heading';
+    heading.textContent = 'Solar Radiation';
+
+    const container = document.createElement('div');
+    container.className = 'highlight-info';
+
+    const info = document.createElement('div');
+    info.className = 'info';
+
+    const span = document.createElement('span');
+    span.innerHTML = value;
+
+    info.appendChild(span);
+
+    const ratingSpan = document.createElement('span');
+    ratingSpan.className = 'info-rating';
+    ratingSpan.textContent = rating;
+
+    container.appendChild(info);
+    container.appendChild(ratingSpan);
+
+    solarRadiation.appendChild(heading);
+    solarRadiation.appendChild(container);
+  }
 }
 
 function convertTemp(e) {

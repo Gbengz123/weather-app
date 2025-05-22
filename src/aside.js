@@ -7,7 +7,7 @@ const showcaseTime = asideShowcase.querySelector('#time');
 const showcaseImage = asideShowcase.querySelector('#current-weather-svg');
 const showcaseCondition = asideShowcase.querySelector('#condition');
 
-const asideBottom = document.getElementById('aside-bottom');
+const locationContainer = document.getElementById('location');
 const tommorowForcast = document.getElementById('tomorrow-temp');
 const tommorowDate = tommorowForcast.querySelector('small');
 const tommorowTemp = tommorowForcast.querySelector('.temp');
@@ -18,9 +18,10 @@ const tommorowForcastIcon = tommorowForcast.querySelector(
 async function displayAsideData() {
   const currentdayData = (await Forcastdata).currentDayData;
   const weekData = (await Forcastdata).currentweekData;
+  const addressData = (await Forcastdata).address;
 
   displayAsideShowcase(currentdayData);
-  displayAsidebBottom(weekData);
+  displayAsidebBottom(weekData, addressData);
 }
 
 export default displayAsideData;
@@ -42,7 +43,7 @@ function displayAsideShowcase(dayData) {
 }
 
 //Display aside bottom data
-function displayAsidebBottom(weekData) {
+function displayAsidebBottom(weekData, addressData) {
   const tommorow = weekData[1];
 
   const date = new Date(tommorow.datetime);
@@ -56,4 +57,6 @@ function displayAsidebBottom(weekData) {
   tommorowTemp.innerHTML = `${tommorow.temp}&deg;C`;
 
   loadSVG(`${tommorow.icon}.svg`, tommorowForcastIcon.id);
+
+  locationContainer.textContent = addressData.resolvedAddress;
 }
